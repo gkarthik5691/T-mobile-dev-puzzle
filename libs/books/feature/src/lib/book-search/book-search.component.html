@@ -7,7 +7,7 @@
       placeholder="Search for books to add to your reading list"
       formControlName="term"
     />
-    <button mat-icon-button matSuffix>
+    <button aria-label="Search Books" mat-icon-button matSuffix>
       <mat-icon>search</mat-icon>
     </button>
   </mat-form-field>
@@ -15,21 +15,25 @@
 
 <ng-container *ngIf="searchTerm; else empty">
   <div class="book-grid">
-    <div class="book" data-testing="book-item" *ngFor="let b of books">
-      <div class="book--title">
+    <div class="book" data-testing="book-item" *ngFor="let b of books$ | async">
+      <div tabindex="0" [attr.aria-label]="b.title" class="book--title">
         {{ b.title }}
       </div>
       <div class="book--content">
-        <div class="book--content--cover">
-          <img src="{{ b.coverUrl }}" />
+        <div tabindex="0" class="book--content--cover">
+          <img [alt]="b.title + ' Book'" [attr.aria-label]="b.title + ' Book'" src="{{ b.coverUrl }}" />
         </div>
         <div class="book--content--info">
-          <div><strong>Author:</strong> {{ b.authors.join(',') }}</div>
-          <div><strong>Publisher:</strong> {{ b.publisher }}</div>
-          <div>
-            <strong>Published:</strong> {{ formatDate(b.publishedDate) }}
+          <div tabindex="0" [attr.aria-label]="b.authors.join(',')">
+            <strong>Author:</strong> {{ b.authors.join(',') }}
           </div>
-          <p [innerHTML]="b.description"></p>
+          <div tabindex="0" [attr.aria-label]="b.publisher">
+            <strong>Publisher:</strong> {{ b.publisher }}
+          </div>
+          <div tabindex="0" [attr.aria-label]="b.publishedDate | date: 'M/d/yyyy'">
+            <strong>Published:</strong> {{ b.publishedDate | date: 'M/d/yyyy' }}
+          </div>
+          <p tabindex="0" [attr.aria-label]="b.description" [innerHTML]="b.description"></p>
           <div>
             <button
               mat-flat-button
@@ -47,10 +51,9 @@
 </ng-container>
 <ng-template #empty>
   <div class="empty">
-    <p>
-      Try searching for a topic, for example "<a (click)="searchExample()"
-        >JavaScript</a
-      >".
+    <p tabindex="0" aria-label="Try searching for a topic, for example JavaScript">
+      Try searching for a topic, for example "<a tabindex="0" (click)="searchExample()"
+        >JavaScript</a>".
     </p>
   </div>
 </ng-template>
