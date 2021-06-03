@@ -8,6 +8,8 @@ import { SharedTestingModule } from '@tmo/shared/testing';
 import { ReadingListEffects } from './reading-list.effects';
 import * as ReadingListActions from './reading-list.actions';
 import { BOOKS_API_CONSTANT } from '../books-api.constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Overlay } from '@angular/cdk/overlay';
 
 describe('ToReadEffects', () => {
   let actions: ReplaySubject<any>;
@@ -20,7 +22,9 @@ describe('ToReadEffects', () => {
       providers: [
         ReadingListEffects,
         provideMockActions(() => actions),
-        provideMockStore()
+        provideMockStore(),
+        MatSnackBar,
+        Overlay
       ]
     });
 
