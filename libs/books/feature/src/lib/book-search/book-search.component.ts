@@ -1,25 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import {
   addToReadingList,
   clearSearch,
   getAllBooks,
-  ReadingListBook,
   searchBooks
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
+import { BOOKS_CONSTANT } from '../books.constant';
 
 @Component({
   selector: 'tmo-book-search',
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.scss']
 })
-export class BookSearchComponent implements OnInit {
-  books: ReadingListBook[];
+export class BookSearchComponent {
+
+  books$ = this.store.pipe(select(getAllBooks));
 
   searchForm = this.fb.group({
-    term: ''
+    term: BOOKS_CONSTANT.EMPTY_SEARCH
   });
 
   constructor(
@@ -31,24 +32,12 @@ export class BookSearchComponent implements OnInit {
     return this.searchForm.value.term;
   }
 
-  ngOnInit(): void {
-    this.store.select(getAllBooks).subscribe(books => {
-      this.books = books;
-    });
-  }
-
-  formatDate(date: void | string) {
-    return date
-      ? new Intl.DateTimeFormat('en-US').format(new Date(date))
-      : undefined;
-  }
-
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
   }
 
   searchExample() {
-    this.searchForm.controls.term.setValue('javascript');
+    this.searchForm.controls.term.setValue(BOOKS_CONSTANT.DEFAULT_SEARCH);
     this.searchBooks();
   }
 
