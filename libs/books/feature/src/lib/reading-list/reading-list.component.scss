@@ -39,7 +39,13 @@
   overflow: hidden;
   white-space: nowrap;
 }
+.button-icon {
+  flex-direction: row !important;
 
+  .check_circle_success {
+    color: #0e6406;
+  }
+}
 .empty {
   font-weight: 100;
   font-size: 1rem;

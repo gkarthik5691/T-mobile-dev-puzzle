@@ -4,7 +4,7 @@ import { createReadingListItem, SharedTestingModule } from '@tmo/shared/testing'
 import { ReadingListComponent } from './reading-list.component';
 import { BooksFeatureModule } from '@tmo/books/feature';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { removeFromReadingList } from '@tmo/books/data-access';
+import { finishedReadingBook, removeFromReadingList } from '@tmo/books/data-access';
 
 describe('ReadingListComponent', () => {
   let component: ReadingListComponent;
@@ -34,5 +34,10 @@ describe('ReadingListComponent', () => {
     const book = createReadingListItem('A');
     component.removeFromReadingList(book);
     expect(dispatchSpy).toHaveBeenCalledWith(removeFromReadingList({item: book}));
+  });
+  it('should test markAsFinish', () => {
+    const book = createReadingListItem('A');
+    component.markAsFinish(book);
+    expect(dispatchSpy).toHaveBeenCalledWith(finishedReadingBook({item: book}));
   });
 });
