@@ -36,6 +36,7 @@
           <p tabindex="0" [attr.aria-label]="b.description" [innerHTML]="b.description"></p>
           <div>
             <button
+              data-testing="want-to-read"
               mat-flat-button
               color="primary"
               (click)="addBookToReadingList(b)"
