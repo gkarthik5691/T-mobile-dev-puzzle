@@ -8,10 +8,10 @@
       <div tabindex="0" [attr.aria-label]="b.authors.join(',')" class="reading-list-item--details--author">
         {{ b.authors.join(',') }}
       </div>
-    </div>
-    <div *ngIf="b.finished" data-testing="finished-date" tabindex="0"
-         [attr.aria-label]="'Finished on' + b.finishedDate" class="reading-list-item--details--author">
-            Finished on: {{ b.finishedDate }}
+      <div *ngIf="b.finished" data-testing="finished-date" tabindex="0"
+           [attr.aria-label]="'Finished on' + b.finishedDate" class="reading-list-item--details--author">
+        Finished on: {{ b.finishedDate | date}}
+      </div>
     </div>
     <div class="button-icon">
     <button
