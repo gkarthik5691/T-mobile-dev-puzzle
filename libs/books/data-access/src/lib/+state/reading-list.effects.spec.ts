@@ -4,7 +4,7 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { HttpTestingController } from '@angular/common/http/testing';
 
-import { SharedTestingModule } from '@tmo/shared/testing';
+import { createReadingListItem, SharedTestingModule } from '@tmo/shared/testing';
 import { ReadingListEffects } from './reading-list.effects';
 import * as ReadingListActions from './reading-list.actions';
 import { BOOKS_API_CONSTANT } from '../books-api.constant';
@@ -43,4 +43,48 @@ describe('ToReadEffects', () => {
       httpMock.expectOne(BOOKS_API_CONSTANT.READING_LIST_API).flush([]);
     });
   });
+
+  describe('finishedReadingBook$', () => {
+    it('Should invoke confirmedFinishedReadingBook action once finish Book API is successful', done => {
+      actions = new ReplaySubject();
+      const readingList = createReadingListItem('A');
+      actions.next(ReadingListActions.finishedReadingBook({ item: readingList }));
+      const finishedBook = {
+        ...readingList,
+        finished: true,
+        finishedDate: '2020-01-01T00:00:00.000Z'
+      };
+      effects.finishBook$.subscribe(action => {
+        expect(action).toEqual(
+          ReadingListActions.confirmedFinishedReadingBook({
+            item: finishedBook
+          })
+        );
+        done();
+      });
+
+      httpMock.expectOne(`${BOOKS_API_CONSTANT.READING_LIST_API}/A/finished`).flush({
+        ...finishedBook
+      });
+    });
+
+    it('Should invoke failedFinishedReadingBook action if finish Book API returns error', done => {
+      actions = new ReplaySubject();
+      const readingList = createReadingListItem('A');
+      actions.next(ReadingListActions.finishedReadingBook({ item: readingList }));
+      effects.finishBook$.subscribe(action => {
+        expect(action).toEqual(
+          ReadingListActions.failedFinishedReadingBook({
+            error: 'Error'
+          })
+        );
+        done();
+      });
+
+      httpMock.expectOne(`${BOOKS_API_CONSTANT.READING_LIST_API}/A/finished`)
+        .error(new ErrorEvent('HttpErrorResponse'),
+          { status: 500, statusText: 'Error' });
+    });
+  });
+
 });

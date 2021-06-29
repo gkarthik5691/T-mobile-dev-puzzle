@@ -51,6 +51,29 @@ describe('Books Reducer', () => {
 
       expect(result.ids).toEqual(['A', 'B']);
     });
+
+    it('finishedReadingBook should update book as finished in reading list', () => {
+      const finishedBook = {
+        ...createReadingListItem('A'),
+        finished: true,
+        finishedDate: '2020-01-01T00:00:00.000Z'
+      };
+      const action = ReadingListActions.confirmedFinishedReadingBook({
+        item: finishedBook
+      });
+
+      const result: State = reducer(state, action);
+      expect(result.entities['A']).toEqual(finishedBook);
+    });
+
+    it('failedFinishedReadingBook should update error state', () => {
+      const action = ReadingListActions.failedFinishedReadingBook({
+        error:'Error'
+      });
+
+      const result: State = reducer(state,action);
+      expect(result.error).toEqual('Error');
+    });
   });
 
   describe('unknown action', () => {
