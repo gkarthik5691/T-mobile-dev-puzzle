@@ -15,6 +15,5 @@ export class ReadingListComponent {
 
   removeFromReadingList(item: ReadingListItem) {
     this.store.dispatch(removeFromReadingList({ item }));
-    this.store.dispatch(undoRemoveFromReadingList({ item }));
   }
 }
